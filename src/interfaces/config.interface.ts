@@ -9,10 +9,17 @@ interface SupaBaseConfigProps {
   databaseName?: string;
 }
 
+interface TwilioBaseConfigProps {
+  accountSid?: string;
+  authToken?: string;
+  phoneNumber?: string;
+}
+
 export interface ConfigProps {
   port: number;
   api: ApiConfigProps;
   supabase: {
     database: SupaBaseConfigProps;
   };
+  twilio: TwilioBaseConfigProps;
 }
