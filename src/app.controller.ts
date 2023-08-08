@@ -1,9 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserService } from './user.service';
 import * as moment from 'moment';
+import { Prisma } from '@prisma/client';
 
-@Controller()
+@Controller('/user')
 export class AppController {
   constructor(
     private readonly appService: AppService,
@@ -24,5 +25,13 @@ export class AppController {
       validationCode: '123456',
       codeExpiration: moment().format(),
     });
+  }
+
+  @Get(':phone')
+  async loginUser(@Param('phone') phone: string) {
+    console.log(phone);
+    const user = await this.userService.user(phone);
+    console.log('user', user);
+    return 'Hello';
   }
 }
