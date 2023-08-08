@@ -2,7 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserService } from './user.service';
 import * as moment from 'moment';
-import { Prisma } from '@prisma/client';
+import parsePhoneNumber, { PhoneNumber } from 'libphonenumber-js';
 
 @Controller('/user')
 export class AppController {
@@ -30,8 +30,11 @@ export class AppController {
   @Get(':phone')
   async loginUser(@Param('phone') phone: string) {
     console.log(phone);
-    const user = await this.userService.user(phone);
-    console.log('user', user);
+    const phoneNumber = parsePhoneNumber(phone, 'IL');
+    if (phoneNumber && phoneNumber.isPossible()) {
+      const user = await this.userService.user(phoneNumber.number);
+      console.log('user', user);
+    }
     return 'Hello';
   }
 }
