@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TwilioModule } from 'nestjs-twilio';
+import { UserService } from './user.service';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -19,6 +21,6 @@ import { TwilioModule } from 'nestjs-twilio';
     }),
   ],
   controllers: [AppController],
-  providers: [ConfigService, AppService],
+  providers: [ConfigService, AppService, UserService, PrismaService],
 })
 export class AppModule {}
