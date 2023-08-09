@@ -1,8 +1,13 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserService } from './user.service';
+import { JoiValidationPipe } from './validations/joi-schema.validation';
+import { UserCreateDto } from './validations/user/dto/create.dto';
+import { UserSchema } from './validations/user/user.schema';
+import { getPhoneNumber, isValidPhoneNumber } from './utils/phone';
+import { getRandomCode } from './utils/codes';
 import * as moment from 'moment';
-import parsePhoneNumber, { PhoneNumber } from 'libphonenumber-js';
+import { PhoneSchema } from './validations/user/phone.schema';
 
 @Controller('/user')
 export class AppController {
@@ -16,25 +21,24 @@ export class AppController {
     this.appService.sendSMS();
   }
 
-  @Get()
-  createUser() {
-    this.userService.createUser({
-      phone: '+972501234567',
-      name: 'Ronen Mars',
-      email: 'ronenmars@gmail.com',
-      validationCode: '123456',
-      codeExpiration: moment().format(),
-    });
+  @Post()
+  @UsePipes(new JoiValidationPipe(UserSchema))
+  createUser(@Body() user: UserCreateDto) {
+    if (isValidPhoneNumber(user.phone)) {
+      user.codeExpiration = moment().format();
+      user.validationCode = getRandomCode();
+
+      this.userService.createUser(user);
+    }
   }
 
   @Get(':phone')
+  @UsePipes(new JoiValidationPipe(PhoneSchema))
   async loginUser(@Param('phone') phone: string) {
-    console.log(phone);
-    const phoneNumber = parsePhoneNumber(phone, 'IL');
-    if (phoneNumber && phoneNumber.isPossible()) {
-      const user = await this.userService.user(phoneNumber.number);
-      console.log('user', user);
-      console.log('random number', Math.random().toString().slice(2, 6));
+    if (isValidPhoneNumber(phone)) {
+      const phoneNumber = getPhoneNumber(phone);
+      const user = await this.userService.user(phoneNumber);
+      console.log(user);
     }
     return 'Hello';
   }

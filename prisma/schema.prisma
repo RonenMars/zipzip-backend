@@ -12,6 +12,7 @@ model User {
   phone String  @unique
   name  String
   email String?
+  isVerified Boolean @default(false)
   validationCode String?
   codeExpiration DateTime?
 }
