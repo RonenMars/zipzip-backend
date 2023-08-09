@@ -34,6 +34,7 @@ export class AppController {
     if (phoneNumber && phoneNumber.isPossible()) {
       const user = await this.userService.user(phoneNumber.number);
       console.log('user', user);
+      console.log('random number', Math.random().toString().slice(2, 6));
     }
     return 'Hello';
   }
