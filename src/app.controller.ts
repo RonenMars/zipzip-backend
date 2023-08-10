@@ -8,6 +8,7 @@ import { getPhoneNumber, isValidPhoneNumber } from './utils/phone';
 import { getRandomCode } from './utils/codes';
 import * as moment from 'moment';
 import { PhoneSchema } from './validations/user/phone.schema';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 @Controller('/user')
 export class AppController {
