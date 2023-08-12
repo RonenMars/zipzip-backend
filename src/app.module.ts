@@ -22,7 +22,7 @@ import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
       inject: [ConfigService],
     }),
     I18nModule.forRoot({
-      fallbackLanguage: 'en',
+      fallbackLanguage: 'he',
       loaderOptions: {
         path: path.join(__dirname, '/i18n/'),
         watch: true,
