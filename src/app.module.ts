@@ -3,8 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TwilioModule } from 'nestjs-twilio';
-import { UserService } from './user.service';
-import { PrismaService } from './prisma.service';
+import { UserService } from '@root/user.service';
+import { PrismaService } from '@root/prisma.service';
 import * as path from 'path';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 

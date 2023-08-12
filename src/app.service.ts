@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { TwilioService } from 'nestjs-twilio';
 import { ConfigService } from '@nestjs/config';
-import { EnvVariables } from './enums/twilio';
+import { EnvVariables } from '@enums/twilio';
 
 @Injectable()
 export class AppService {

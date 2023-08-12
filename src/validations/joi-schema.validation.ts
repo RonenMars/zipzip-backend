@@ -1,6 +1,6 @@
 import { PipeTransform, BadRequestException, Injectable } from '@nestjs/common';
 import { AnySchema } from 'joi';
-import { translate } from './validations';
+import { translate } from '@i18n/translate';
 
 @Injectable()
 export class JoiValidationPipe implements PipeTransform {
@@ -11,7 +11,7 @@ export class JoiValidationPipe implements PipeTransform {
       const errorMessages = error.details.map((d) => {
         let fieldName = d?.context?.key;
         if (!fieldName) {
-          if (d.message.includes('phone')) {
+          if (d.message.includes('.phone.')) {
             fieldName = 'phone';
           }
         }

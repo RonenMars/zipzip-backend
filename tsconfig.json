@@ -9,7 +9,15 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
+    "paths": {
+      "@root/*": ["./*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@utils/*": ["utils/*"],
+      "@enums/*": ["enums/*"],
+      "@validations/*": ["validations/*"],
+      "@i18n/*": ["i18n/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,

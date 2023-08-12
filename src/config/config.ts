@@ -1,4 +1,4 @@
-import { ConfigProps } from 'src/interfaces/config.interface';
+import { ConfigProps } from '@interfaces/config.interface';
 
 export const config = (): ConfigProps => ({
   port: parseInt(<string>process.env.PORT, 10) || 8080,

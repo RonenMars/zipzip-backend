@@ -1,13 +1,17 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { AppService } from './app.service';
-import { UserService } from './user.service';
-import { JoiValidationPipe } from './validations/joi-schema.validation';
-import { UserCreateDto } from './validations/user/dto/create.dto';
-import { UserSchema } from './validations/user/user.schema';
-import { getPhoneNumber, isValidPhoneNumber } from './utils/phone';
-import { getRandomCode } from './utils/codes';
+import { AppService } from '@root/app.service';
+import { UserService } from '@root/user.service';
+
+import { JoiValidationPipe } from '@validations/joi-schema.validation';
+import { UserCreateDto } from '@validations/user/dto';
+import { PhoneSchema, UserSchema } from '@validations/user';
+
+import {
+  getPhoneNumber,
+  isValidPhoneNumber,
+  getRandomCode,
+} from '@utils/index';
 import * as moment from 'moment';
-import { PhoneSchema } from './validations/user/phone.schema';
 
 @Controller('/user')
 export class AppController {
@@ -39,7 +43,8 @@ export class AppController {
       const phoneNumber = getPhoneNumber(phone);
       const user = await this.userService.user(phoneNumber);
       console.log(user);
+      return 'true';
     }
-    return 'Hello';
+    return 'false';
   }
 }

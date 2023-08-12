@@ -1,0 +1,17 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "../../",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@root(.*)$": "<rootDir>/$1",
+    "^@validations(.*)$": "<rootDir>/validations/$1",
+    "^@interfaces(.*)$": "<rootDir>/interfaces/$1",
+    "^@utils(.*)$": "<rootDir>/utils/$1",
+    "^@enums(.*)$": "<rootDir>/enums/$1",
+    "^@i18n(.*)$": "<rootDir>/i18n/$1"
+  }
+}
