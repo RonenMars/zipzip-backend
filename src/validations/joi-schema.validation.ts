@@ -8,9 +8,10 @@ export class JoiValidationPipe implements PipeTransform {
   public transform(value: any) {
     const { error } = this.schema.validate(value);
     if (error) {
-      const errorMessages = error.details
-        .map((d) => translate(d.message))
-        .join();
+      const errorMessages = error.details.map((d) => ({
+        name: d.path[0],
+        message: translate(d.message),
+      }));
       throw new BadRequestException(errorMessages);
     }
     return value;
