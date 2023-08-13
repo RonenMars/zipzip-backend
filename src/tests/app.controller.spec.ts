@@ -8,7 +8,6 @@ import { UserService } from '@root/user.service';
 import { PrismaService } from '@root/prisma.service';
 import * as path from 'path';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
-import * as moment from 'moment';
 
 describe('AppController', () => {
   let appController: AppController;
