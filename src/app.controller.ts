@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
+
 import { AppService } from '@root/app.service';
 import { UserService } from '@root/user.service';
 
@@ -43,7 +44,7 @@ export class AppController {
       const phoneNumber = getPhoneNumber(phone);
       const user = await this.userService.user(phoneNumber);
       console.log(user);
-      return 'true';
+      return user;
     }
     return 'false';
   }

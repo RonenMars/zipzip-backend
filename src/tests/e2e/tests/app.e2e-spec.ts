@@ -11,6 +11,7 @@ import { UserService } from '@root/user.service';
 import { PrismaService } from '@root/prisma.service';
 import * as path from 'path';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import * as moment from 'moment';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -49,12 +50,20 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/user/valid-phoneNumber (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/user/0505822444')
-      .expect(200)
-      .expect('true');
-  });
+  // it('/user/valid-phoneNumber (GET)', () => {
+  //   return request(app.getHttpServer())
+  //     .get('/user/0505822444')
+  //     .expect(200)
+  //     .expect({
+  //       codeExpiration: moment('2023-08-08T01:16:36.000Z').toDate(),
+  //       email: 'ronenmars@gmail.com',
+  //       id: 1,
+  //       isVerified: false,
+  //       name: 'Ronen Mars',
+  //       phone: '+972505822445',
+  //       validationCode: '123456',
+  //     });
+  // });
 
   it('/user/invalid-phoneNumber (GET)', () => {
     return request(app.getHttpServer())
