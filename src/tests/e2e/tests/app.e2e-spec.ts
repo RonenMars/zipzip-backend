@@ -17,6 +17,23 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
+    const mockPrismaService = {
+      provide: PrismaService,
+      useFactory: () => ({
+        user: {
+          findUnique: jest.fn(() => ({
+            codeExpiration: '2023-08-08T01:16:36.000Z',
+            email: 'ronenmars@gmail.com',
+            id: 1,
+            isVerified: false,
+            name: 'Ronen Mars',
+            phone: '+972505822445',
+            validationCode: '123456',
+          })),
+        },
+      }),
+    };
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
@@ -43,27 +60,27 @@ describe('AppController (e2e)', () => {
         }),
       ],
       controllers: [AppController],
-      providers: [AppService, UserService, PrismaService],
+      providers: [AppService, UserService, mockPrismaService],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  // it('/user/valid-phoneNumber (GET)', () => {
-  //   return request(app.getHttpServer())
-  //     .get('/user/0505822444')
-  //     .expect(200)
-  //     .expect({
-  //       codeExpiration: moment('2023-08-08T01:16:36.000Z').toDate(),
-  //       email: 'ronenmars@gmail.com',
-  //       id: 1,
-  //       isVerified: false,
-  //       name: 'Ronen Mars',
-  //       phone: '+972505822445',
-  //       validationCode: '123456',
-  //     });
-  // });
+  it('/user/valid-phoneNumber (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/user/0505822444')
+      .expect(200)
+      .expect({
+        codeExpiration: '2023-08-08T01:16:36.000Z',
+        email: 'ronenmars@gmail.com',
+        id: 1,
+        isVerified: false,
+        name: 'Ronen Mars',
+        phone: '+972505822445',
+        validationCode: '123456',
+      });
+  });
 
   it('/user/invalid-phoneNumber (GET)', () => {
     return request(app.getHttpServer())

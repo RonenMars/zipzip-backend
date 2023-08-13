@@ -14,6 +14,23 @@ describe('AppController', () => {
   let appController: AppController;
 
   beforeEach(async () => {
+    const mockPrismaService = {
+      provide: PrismaService,
+      useFactory: () => ({
+        user: {
+          findUnique: jest.fn(() => ({
+            codeExpiration: '2023-08-08T01:16:36.000Z',
+            email: 'ronenmars@gmail.com',
+            id: 1,
+            isVerified: false,
+            name: 'Ronen Mars',
+            phone: '+972505822445',
+            validationCode: '123456',
+          })),
+        },
+      }),
+    };
+
     const app: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
@@ -40,7 +57,7 @@ describe('AppController', () => {
         }),
       ],
       controllers: [AppController],
-      providers: [AppService, UserService, PrismaService],
+      providers: [AppService, UserService, mockPrismaService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
@@ -50,7 +67,7 @@ describe('AppController', () => {
     it('Valid phone number should return "true"', async () => {
       const functionResponse = await appController.loginUser('0505822445');
       expect(functionResponse).toStrictEqual({
-        codeExpiration: moment('2023-08-08T01:16:36.000Z').toDate(),
+        codeExpiration: '2023-08-08T01:16:36.000Z',
         email: 'ronenmars@gmail.com',
         id: 1,
         isVerified: false,
