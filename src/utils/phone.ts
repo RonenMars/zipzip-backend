@@ -1,8 +1,5 @@
 import { parsePhoneNumber } from 'libphonenumber-js';
 
-const isValidPhoneNumber = (phoneString: string) =>
-  parsePhoneNumber(phoneString, 'IL').isPossible();
-
 const getPhoneNumber = (phoneString: string) => {
   const phoneNumber = parsePhoneNumber(phoneString, 'IL');
   if (phoneNumber) {
@@ -11,4 +8,4 @@ const getPhoneNumber = (phoneString: string) => {
   return '';
 };
 
-export { isValidPhoneNumber, getPhoneNumber };
+export { getPhoneNumber };

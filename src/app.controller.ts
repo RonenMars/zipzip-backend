@@ -7,11 +7,7 @@ import { JoiValidationPipe } from '@validations/joi-schema.validation';
 import { UserCreateDto } from '@validations/user/dto';
 import { PhoneSchema, UserSchema } from '@validations/user';
 
-import {
-  getPhoneNumber,
-  isValidPhoneNumber,
-  getRandomCode,
-} from '@utils/index';
+import { getPhoneNumber, getRandomCode } from '@utils/index';
 import * as moment from 'moment';
 
 @Controller('/user')
@@ -29,23 +25,18 @@ export class AppController {
   @Post()
   @UsePipes(new JoiValidationPipe(UserSchema))
   createUser(@Body() user: UserCreateDto) {
-    if (isValidPhoneNumber(user.phone)) {
-      user.codeExpiration = moment().format();
-      user.validationCode = getRandomCode();
+    user.codeExpiration = moment().format();
+    user.validationCode = getRandomCode();
 
-      this.userService.createUser(user);
-    }
+    this.userService.createUser(user);
   }
 
   @Get(':phone')
   @UsePipes(new JoiValidationPipe(PhoneSchema))
   async loginUser(@Param('phone') phone: string) {
-    if (isValidPhoneNumber(phone)) {
-      const phoneNumber = getPhoneNumber(phone);
-      const user = await this.userService.user(phoneNumber);
-      console.log(user);
-      return user;
-    }
-    return 'false';
+    const phoneNumber = getPhoneNumber(phone);
+    const user = await this.userService.user(phoneNumber);
+    console.log(user);
+    return user;
   }
 }
