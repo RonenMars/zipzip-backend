@@ -2,16 +2,16 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { HttpException } from '@nestjs/common';
 import { PrismaService } from '@root/prisma.service';
-import { verifyPassword } from '@utils/index';
-import { UserPhoneDto } from '@validations/user/dto/login.phone.dto';
+import { getPhoneNumber, verifyPassword } from '@utils/index';
+import { UserLoginDto } from '@validations/user/dto/index';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-  async login(loginDto: UserPhoneDto) {
+  async login(loginDto: UserLoginDto) {
     const user = await this.prisma.user.findUnique({
-      where: { phone: loginDto.phone },
+      where: { phone: getPhoneNumber(loginDto.phone) },
     });
     if (!user) {
       throw new HttpException(
@@ -19,6 +19,11 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    return {
+      success: true,
+      // access_token: await this.jwtService.signAsync(payload),
+    };
     // const validPassword = await verifyPassword(
     //   loginDto.password,
     //   user.password,
