@@ -17,6 +17,7 @@ interface TwilioBaseConfigProps {
 
 export interface ConfigProps {
   port: number;
+  jsonWebToken?: string;
   api: ApiConfigProps;
   supabase: {
     database: SupaBaseConfigProps;
