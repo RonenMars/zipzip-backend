@@ -4,7 +4,7 @@ export const hashPassword = async (
   password: string | undefined,
 ): Promise<string> => {
   if (password) {
-    return await bcrypt.hash(password, 10);
+    return (await bcrypt.hash(password, 10)) || '';
   } else return '';
 };
 
