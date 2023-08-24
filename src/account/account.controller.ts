@@ -7,7 +7,6 @@ import {
   UsePipes,
   HttpException,
   HttpStatus,
-  Inject,
 } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { JoiValidationPipe } from '@validations/joi-schema.validation';
@@ -31,7 +30,6 @@ export class AccountController {
   constructor(
     private readonly accountService: AccountService,
     private readonly twilioService: TwilioService,
-    @Inject(ConfigService)
     private readonly configService: ConfigService,
   ) {}
 
@@ -64,9 +62,8 @@ export class AccountController {
             codeExpiration: moment().add(3, 'minutes').format(),
           },
         });
-
         await sendSMS(
-          this.configService.get(EnvVariables.TwilioSenderPhoneNumber) || '',
+          <string>this.configService.get(EnvVariables.TwilioSenderPhoneNumber),
           user.phone,
           message,
           this.twilioService.client,
