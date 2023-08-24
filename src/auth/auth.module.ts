@@ -6,16 +6,17 @@ import { PrismaModule } from '@root/prisma.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvVariables } from '@enums/env.variables';
 import { PrismaService } from '@root/prisma.service';
+import { AccountService } from '@root/account/account.service';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, PrismaService],
+  providers: [AuthService, PrismaService, AccountService],
   imports: [
     PrismaModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secretOrPrivateKey: configService.get(EnvVariables.JsonWebToken),
+        secret: <string>configService.get(EnvVariables.JsonWebToken),
         signOptions: {
           expiresIn: 3600,
         },

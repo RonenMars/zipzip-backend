@@ -6,20 +6,19 @@ import { UserService } from '@root/user.service';
 import { PrismaService } from '@root/prisma.service';
 import * as path from 'path';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
-import { AccountModule } from './account/account.module';
-import { AuthController } from './auth/auth.controller';
-import { AuthModule } from './auth/auth.module';
+import { AuthController, AuthModule, AuthService } from '@auth/index';
 import { LoggerMiddleware } from '@utils/logger';
-import { AccountController } from '@root/account/account.controller';
-import { AuthService } from '@root/auth/auth.service';
-import { AccountService } from '@root/account/account.service';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { AccountService, AccountController } from '@account/index';
+import { JwtModule } from '@nestjs/jwt';
 import { TwilioModule } from 'nestjs-twilio';
+import { config } from '@root/config/config';
+import { EnvVariables } from '@enums/env.variables';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [config],
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'he',
@@ -37,8 +36,8 @@ import { TwilioModule } from 'nestjs-twilio';
     TwilioModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        accountSid: configService.get('twilio.accountSid'),
-        authToken: configService.get('twilio.authToken'),
+        accountSid: configService.get(EnvVariables.TwilioAccountSid),
+        authToken: configService.get(EnvVariables.TwilioAuthToken),
       }),
       inject: [ConfigService],
     }),
@@ -50,7 +49,6 @@ import { TwilioModule } from 'nestjs-twilio';
     PrismaService,
     AuthService,
     AccountService,
-    JwtService,
   ],
 })
 export class AppModule implements NestModule {

@@ -1,4 +1,6 @@
 export const enum EnvVariables {
-  TwilioSenderPhoneNumber = 'TWILIO_PHONE_NUMBER',
-  JsonWebToken = 'JWT_SECRET',
+  TwilioSenderPhoneNumber = 'twilio.phoneNumber',
+  JsonWebToken = 'jsonWebToken',
+  TwilioAccountSid = 'twilio.accountSid',
+  TwilioAuthToken = 'twilio.authToken',
 }
