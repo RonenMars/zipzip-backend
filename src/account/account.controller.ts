@@ -18,7 +18,7 @@ import {
   hashPassword,
   isValidPhoneNumber,
 } from '@root/utils';
-import moment from 'moment';
+import * as moment from 'moment';
 import { TwilioService } from 'nestjs-twilio';
 import { ConfigService } from '@nestjs/config';
 import { EnvVariables } from '@enums/env.variables';
@@ -69,7 +69,7 @@ export class AccountController {
           this.twilioService.client,
         );
 
-        return user.id;
+        return { userId: user.id };
       } else {
         throw new HttpException('No users found', HttpStatus.NO_CONTENT);
       }
