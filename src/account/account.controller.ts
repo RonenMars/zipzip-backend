@@ -18,7 +18,7 @@ import {
   hashPassword,
   isValidPhoneNumber,
 } from '@root/utils';
-import * as moment from 'moment';
+import moment from 'moment';
 import { TwilioService } from 'nestjs-twilio';
 import { ConfigService } from '@nestjs/config';
 import { EnvVariables } from '@enums/env.variables';
