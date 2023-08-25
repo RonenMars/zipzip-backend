@@ -35,12 +35,12 @@ export class AccountController {
 
   @Post()
   @UsePipes(new JoiValidationPipe(UserSchema))
-  createUser(@Body() user: UserCreateDto) {
+  async createUser(@Body() user: UserCreateDto) {
     if (isValidPhoneNumber(user.phone)) {
       user.codeExpiration = moment().format();
       user.validationCode = generateOTP(4);
 
-      this.accountService.createUser(user);
+      await this.accountService.createUser(user);
     }
   }
 

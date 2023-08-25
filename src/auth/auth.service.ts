@@ -2,8 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { HttpException } from '@nestjs/common';
 import { PrismaService } from '@root/prisma.service';
-import { getPhoneNumber, verifyPassword } from '@utils/index';
-import { UserLoginDto } from '@validations/user/dto/index';
+import { getPhoneNumber, verifyPassword } from '@root/utils';
+import { UserLoginDto } from '@validations/user/dto';
 import { AccountService } from '@root/account/account.service';
 
 @Injectable()
