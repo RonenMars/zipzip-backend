@@ -1,5 +1,5 @@
 import { generateOTP } from '@utils/codeGenerator';
 import { getPhoneNumber } from '@utils/phone';
-import { hashPassword } from '@utils/passwordHandler';
+import { hashPassword, verifyPassword } from '@utils/passwordHandler';
 
-export { generateOTP, getPhoneNumber, hashPassword };
+export { generateOTP, getPhoneNumber, hashPassword, verifyPassword };
