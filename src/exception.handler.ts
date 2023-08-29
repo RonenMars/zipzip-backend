@@ -21,7 +21,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let message;
 
     if (Array.isArray(responseMessage)) {
-      message = responseMessage.map((message: string) => translate(message));
+      message = responseMessage.map((error: object) => ({
+        ...error,
+        message: translate(<string>(<unknown>get(error, 'message'))),
+      }));
     } else {
       message = translate(responseMessage);
     }

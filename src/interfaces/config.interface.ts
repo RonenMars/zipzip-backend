@@ -30,6 +30,7 @@ interface TwilioBaseConfigProps {
 export interface ConfigProps {
   port: number; // The port on which the application should listen.
   jsonWebToken: string; // The JSON Web Token (JWT) secret.
+  frontendURL: string; // The JSON Web Token (JWT) secret.
   api: ApiConfigProps; // API configuration properties.
   supabase: {
     database: SupaBaseConfigProps; // Supabase database configuration properties.

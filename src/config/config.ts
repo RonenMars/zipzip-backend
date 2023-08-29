@@ -13,6 +13,7 @@ export const config = (): ConfigProps => ({
   },
   jsonWebToken: <string>process.env.JWT_SECRET,
   port: parseInt(<string>process.env.PORT, 10) || 3000,
+  frontendURL: <string>process.env.FRONTEND_URL,
   supabase: {
     database: {
       connectionURL: process.env.SUPABASE_API_URL,

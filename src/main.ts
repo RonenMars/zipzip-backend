@@ -17,7 +17,6 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.use(function (request: Request, response: Response, next: NextFunction) {
-    response.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5173');
     let err = null;
 
     try {
@@ -39,6 +38,12 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.enableCors({
+    origin: <string>config.get('FRONTEND_URL'),
+    methods: ['GET', 'POST'],
+    credentials: true,
+  });
 
   await app.listen(port);
 }
