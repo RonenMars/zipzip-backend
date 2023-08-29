@@ -14,20 +14,25 @@ export class AuthService {
     private readonly accountService: AccountService,
   ) {}
 
+  /**
+   * Authenticate a user by logging them in.
+   *
+   * @param {UserLoginDto} loginDto - The user's login data.
+   * @returns {Promise<{ success: boolean, access_token: string }>} A response containing an access token if authentication is successful.
+   * @throws {HttpException} Throws an exception with a status code and message for various authentication failures.
+   */
   async login(loginDto: UserLoginDto) {
     const user = await this.prisma.user.findUnique({
       where: { phone: getPhoneNumber(loginDto.phone) },
     });
+
     if (!user) {
-      throw new HttpException(
-        'Invalid email or password',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('auth.user.not.found', HttpStatus.BAD_REQUEST);
     }
 
     if (user.validationCode === null) {
       throw new HttpException(
-        'Invalid email or password',
+        'auth.user.missing.validation.code',
         HttpStatus.BAD_REQUEST,
       );
     } else {
@@ -38,7 +43,7 @@ export class AuthService {
 
       if (!validPassword) {
         throw new HttpException(
-          'Invalid email or password',
+          'auth.user.bad.validation.code',
           HttpStatus.BAD_REQUEST,
         );
       }

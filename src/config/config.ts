@@ -1,4 +1,11 @@
 import { ConfigProps } from '@interfaces/config.interface';
+
+/**
+ * Retrieves configuration values from environment variables and returns them
+ * as a configuration object.
+ *
+ * @returns {ConfigProps} The configuration object containing various properties.
+ */
 export const config = (): ConfigProps => ({
   api: {
     apiUrl: process.env.API_URL,

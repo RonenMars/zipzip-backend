@@ -8,6 +8,12 @@ import { JoiValidationPipe } from '@validations/joi-schema.validation';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  /**
+   * Authenticate a user by logging them in.
+   *
+   * @param {UserLoginDto} loginDto - The user's login data.
+   * @returns {Promise<any>} A response from the authentication service.
+   */
   @UsePipes(new JoiValidationPipe(LoginSchema))
   @HttpCode(200)
   @Post('login')

@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserService } from '@root/user.service';
 import { PrismaService } from '@root/prisma.service';
 import * as path from 'path';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
@@ -43,13 +42,7 @@ import { EnvVariables } from '@enums/env.variables';
     }),
   ],
   controllers: [AppController, AuthController, AccountController],
-  providers: [
-    AppService,
-    UserService,
-    PrismaService,
-    AuthService,
-    AccountService,
-  ],
+  providers: [AppService, PrismaService, AuthService, AccountService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

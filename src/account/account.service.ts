@@ -6,6 +6,12 @@ import { User, Prisma } from '@prisma/client';
 export class AccountService {
   constructor(private prisma: PrismaService) {}
 
+  /**
+   * Find a user by phone number.
+   *
+   * @param {string} phoneNumber - The phone number to search for.
+   * @returns {Promise<User | null>} The user object if found, otherwise null.
+   */
   async user(phoneNumber: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
@@ -14,6 +20,12 @@ export class AccountService {
     });
   }
 
+  /**
+   * Retrieve a list of users based on provided parameters.
+   *
+   * @param {object} params - Parameters for filtering, pagination, and sorting.
+   * @returns {Promise<User[]>} An array of user objects.
+   */
   async users(params: {
     skip?: number;
     take?: number;
@@ -31,12 +43,24 @@ export class AccountService {
     });
   }
 
+  /**
+   * Create a new user.
+   *
+   * @param {Prisma.UserCreateInput} data - The data for creating the user.
+   * @returns {Promise<User>} The created user object.
+   */
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({
       data,
     });
   }
 
+  /**
+   * Update a user's information.
+   *
+   * @param {object} params - Parameters for specifying the user to update and the updated data.
+   * @returns {Promise<User>} The updated user object.
+   */
   async updateUser(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
@@ -48,6 +72,12 @@ export class AccountService {
     });
   }
 
+  /**
+   * Delete a user.
+   *
+   * @param {Prisma.UserWhereUniqueInput} where - The unique identifier for the user to delete.
+   * @returns {Promise<User>} The deleted user object.
+   */
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
       where,

@@ -28,6 +28,11 @@ export class AccountController {
     private readonly configService: ConfigService,
   ) {}
 
+  /**
+   * Create a new user.
+   * @param {UserCreateDto} user - The user object to be created.
+   * @returns {Promise<void>}
+   */
   @Post()
   @UsePipes(new JoiValidationPipe(UserSchema))
   async createUser(@Body() user: UserCreateDto) {
@@ -37,6 +42,11 @@ export class AccountController {
     await this.accountService.createUser(user);
   }
 
+  /**
+   * Login a user using their phone number.
+   * @param {string} phone - The user's phone number.
+   * @returns {Promise<{ userId: number } | HttpException>}
+   */
   @Get(':phone')
   @UsePipes(new JoiValidationPipe(PhoneSchema))
   async loginUser(@Param('phone') phone: string) {
@@ -63,7 +73,7 @@ export class AccountController {
 
       return { userId: user.id };
     } else {
-      throw new HttpException('No users found', HttpStatus.NO_CONTENT);
+      throw new HttpException('No users found', HttpStatus.UNAUTHORIZED);
     }
   }
 }
