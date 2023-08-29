@@ -13,11 +13,11 @@ import { parsePhoneNumber } from 'libphonenumber-js';
  * console.log(normalizedPhoneNumber); // Output: "123456789"
  */
 const getPhoneNumber = (phoneString: string) => {
-    const phoneNumber = parsePhoneNumber(phoneString, 'IL');
-    if (phoneNumber) {
-        return phoneNumber.number;
-    }
-    return '';
+  const phoneNumber = parsePhoneNumber(phoneString, 'IL');
+  if (phoneNumber) {
+    return phoneNumber.number;
+  }
+  return '';
 };
 
 export { getPhoneNumber };

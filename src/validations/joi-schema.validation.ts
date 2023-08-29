@@ -1,6 +1,5 @@
 import { PipeTransform, BadRequestException, Injectable } from '@nestjs/common';
 import { AnySchema } from 'joi';
-import { translate } from '@i18n/translate';
 
 /**
  * A custom NestJS pipe for validating incoming data using Joi schemas.
@@ -53,7 +52,7 @@ export class JoiValidationPipe implements PipeTransform {
         }
         return {
           name: fieldName,
-          message: translate(d.message),
+          message: d.message,
         };
       });
       throw new BadRequestException(errorMessages);

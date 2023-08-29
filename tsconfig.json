@@ -16,6 +16,8 @@
       "@utils/*": ["utils/*"],
       "@enums/*": ["enums/*"],
       "@validations/*": ["validations/*"],
+      "@account/*": ["account/*"],
+      "@auth/*": ["auth/*"],
       "@i18n/*": ["i18n/*"]
     },
     "incremental": true,

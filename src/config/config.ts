@@ -1,11 +1,18 @@
 import { ConfigProps } from '@interfaces/config.interface';
 
+/**
+ * Retrieves configuration values from environment variables and returns them
+ * as a configuration object.
+ *
+ * @returns {ConfigProps} The configuration object containing various properties.
+ */
 export const config = (): ConfigProps => ({
-  port: parseInt(<string>process.env.PORT, 10) || 8080,
   api: {
     apiUrl: process.env.API_URL,
     httpTimeout: 1000,
   },
+  jsonWebToken: <string>process.env.JWT_SECRET,
+  port: parseInt(<string>process.env.PORT, 10) || 3000,
   supabase: {
     database: {
       connectionURL: process.env.SUPABASE_API_URL,
