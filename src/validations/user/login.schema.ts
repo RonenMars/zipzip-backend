@@ -7,10 +7,10 @@ export const LoginSchema = Joi.object({
   validationCode: Joi.string()
     .pattern(/^[0-9]+$/)
     .length(OTP_LENGTH)
-    .required(),
-  // .messages({
-  //   'string.length': 'user.validation.phone.length',
-  //   'string.pattern.base': 'user.validation.phone.pattern',
-  //   'string.required': 'user.validation.phone.required',
-  // })
+    .required()
+    .messages({
+      'string.length': 'user.validation.phone.length',
+      'string.pattern.base': 'user.validation.phone.pattern',
+      'string.required': 'user.validation.phone.required',
+    }),
 });

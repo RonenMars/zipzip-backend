@@ -25,4 +25,5 @@ export const sendSMS = async (
     error.statusCode = 400;
     throw error;
   }
+  return;
 };

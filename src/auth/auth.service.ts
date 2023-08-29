@@ -27,12 +27,15 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new HttpException('auth.user.not.found', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        { message: 'auth.UserNotFound' },
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (user.validationCode === null) {
       throw new HttpException(
-        'auth.user.missing.validation.code',
+        { message: 'auth.UserMissingValidationCode' },
         HttpStatus.BAD_REQUEST,
       );
     } else {
@@ -43,7 +46,7 @@ export class AuthService {
 
       if (!validPassword) {
         throw new HttpException(
-          'auth.user.bad.validation.code',
+          'auth.UserBadValidationCode',
           HttpStatus.BAD_REQUEST,
         );
       }

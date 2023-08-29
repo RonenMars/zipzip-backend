@@ -64,16 +64,23 @@ export class AccountController {
           codeExpiration: moment().add(3, 'minutes').format(),
         },
       });
-      await sendSMS(
-        <string>this.configService.get(EnvVariables.TwilioSenderPhoneNumber),
-        user.phone,
-        message,
-        this.twilioService.client,
-      );
+      if (process.env.NODE_ENV === 'production') {
+        await sendSMS(
+          <string>this.configService.get(EnvVariables.TwilioSenderPhoneNumber),
+          user.phone,
+          message,
+          this.twilioService.client,
+        );
+      } else {
+        console.log('OTP Code: ', otpForUser);
+      }
 
       return { userId: user.id };
     } else {
-      throw new HttpException('No users found', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'user.login.noUsersFound',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }
