@@ -75,10 +75,10 @@ export class AccountController {
         console.log('OTP Code: ', otpForUser);
       }
 
-      return { userId: user.id };
+      return;
     } else {
       throw new HttpException(
-        'user.login.noUsersFound',
+        'user.validation.login.noUsersFound',
         HttpStatus.BAD_REQUEST,
       );
     }

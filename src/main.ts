@@ -27,7 +27,7 @@ async function bootstrap() {
     if (err) {
       console.log(err, request.url);
       throw new HttpException(
-        { message: 'auth.decodeIssue' },
+        { status: HttpStatus.BAD_REQUEST, error: 'auth.decodeIssue' },
         HttpStatus.BAD_REQUEST,
       );
     }
