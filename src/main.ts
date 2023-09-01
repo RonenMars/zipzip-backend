@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 require('module-alias/register');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const config = app.get(ConfigService);
   const port = config.get('PORT');
 
@@ -27,7 +27,7 @@ async function bootstrap() {
     if (err) {
       console.log(err, request.url);
       throw new HttpException(
-        { message: 'auth.decodeIssue' },
+        { status: HttpStatus.BAD_REQUEST, error: 'auth.decodeIssue' },
         HttpStatus.BAD_REQUEST,
       );
     }

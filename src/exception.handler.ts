@@ -15,21 +15,32 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    const responseMessage =
-      get(exception, 'response.message') || exception.message;
+    let responseMessage;
+
+    if (exception.name === 'BadRequestException') {
+      responseMessage = get(exception, 'response.message');
+    } else if (exception.name === 'HttpException') {
+      responseMessage = get(exception, 'response');
+    }
+
+    if (!responseMessage) {
+      responseMessage = 'server.serverErrorTryAgain';
+    }
 
     let message;
 
     if (Array.isArray(responseMessage)) {
-      message = responseMessage.map((error: object) => ({
-        ...error,
-        message: translate(<string>(<unknown>get(error, 'message'))),
-      }));
+      message = responseMessage.map(
+        (error: { name: string; message: string }) => ({
+          ...error,
+          message: translate(error.message),
+        }),
+      );
     } else {
       message = translate(responseMessage);
     }
 
-    response.status(status).json({
+    response.status(status).send({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,

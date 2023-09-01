@@ -78,7 +78,7 @@ export class AccountController {
       return { userId: user.id };
     } else {
       throw new HttpException(
-        'user.login.noUsersFound',
+        'user.validation.login.noUsersFound',
         HttpStatus.BAD_REQUEST,
       );
     }
