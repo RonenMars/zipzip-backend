@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 require('module-alias/register');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
   const port = config.get('PORT');
 
