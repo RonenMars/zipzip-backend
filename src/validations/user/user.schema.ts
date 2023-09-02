@@ -38,9 +38,7 @@ export const UserSchema = Joi.object({
     .required()
     .custom((value, helper) => {
       if (!isValidPhoneNumber(value, 'IL')) {
-        return helper.message(
-          'user.validation.phone.isLocalValid' as unknown as Joi.LanguageMessages,
-        );
+        return helper.message('user.validation.phone.isLocalValid' as unknown as Joi.LanguageMessages);
       }
 
       return true;

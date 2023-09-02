@@ -7,9 +7,7 @@ export class JwtGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const request = this.getRequest<
-      IncomingMessage & { user?: Record<string, unknown> }
-    >(context); // you could use FastifyRequest here too
+    const request = this.getRequest<IncomingMessage & { user?: Record<string, unknown> }>(context); // you could use FastifyRequest here too
     try {
       const token = this.getToken(request);
       const user = this.jwtService.verify(token);
@@ -25,14 +23,11 @@ export class JwtGuard implements CanActivate {
     return context.switchToHttp().getRequest();
   }
 
-  protected getToken(request: {
-    headers: Record<string, unknown> | undefined;
-  }): string {
+  protected getToken(request: { headers: Record<string, unknown> | undefined }): string {
     const authorization = request?.headers?.authorization || undefined;
     if (!authorization || Array.isArray(authorization)) {
       throw new Error('Invalid Authorization Header');
     }
-    const [_, token] = (authorization as string).split(' ');
-    return token;
+    return (authorization as string).split(' ')[1];
   }
 }

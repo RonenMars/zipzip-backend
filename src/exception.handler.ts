@@ -1,9 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { get } from 'lodash';
 import { translate } from '@i18n/translate';
@@ -30,12 +25,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let message;
 
     if (Array.isArray(responseMessage)) {
-      message = responseMessage.map(
-        (error: { name: string; message: string }) => ({
-          ...error,
-          message: translate(error.message),
-        }),
-      );
+      message = responseMessage.map((error: { name: string; message: string }) => ({
+        ...error,
+        message: translate(error.message),
+      }));
     } else {
       message = translate(responseMessage);
     }

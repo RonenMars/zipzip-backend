@@ -25,10 +25,7 @@ import { EnvVariables } from '@enums/env.variables';
         path: path.join(__dirname, '/i18n/'),
         watch: true,
       },
-      resolvers: [
-        { use: QueryResolver, options: ['lang'] },
-        AcceptLanguageResolver,
-      ],
+      resolvers: [{ use: QueryResolver, options: ['lang'] }, AcceptLanguageResolver],
     }),
     AuthModule,
     JwtModule,
