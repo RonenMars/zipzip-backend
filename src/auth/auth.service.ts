@@ -1,6 +1,5 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { HttpException } from '@nestjs/common';
 import { PrismaService } from '@root/prisma.service';
 import { getPhoneNumber, verifyPassword } from '@root/utils';
 import { UserLoginDto } from '@validations/user/dto';
@@ -32,13 +31,9 @@ export class AuthService {
     }
 
     if (user.validationCode === null) {
-      throw new HttpException(
-        'auth.UserMissingValidationCode',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('auth.UserMissingValidationCode', HttpStatus.BAD_REQUEST);
     } else {
-      const isValidationCodeExpired =
-        user.codeExpiration && moment(user.codeExpiration).isBefore(moment());
+      const isValidationCodeExpired = user.codeExpiration && moment(moment()).isBefore(user.codeExpiration);
 
       if (isValidationCodeExpired) {
         const validPassword = await verifyPassword({
@@ -47,16 +42,10 @@ export class AuthService {
         });
 
         if (!validPassword) {
-          throw new HttpException(
-            'auth.UserBadValidationCode',
-            HttpStatus.BAD_REQUEST,
-          );
+          throw new HttpException('auth.UserBadValidationCode', HttpStatus.BAD_REQUEST);
         }
       } else {
-        throw new HttpException(
-          'auth.ValidationCodeExpired',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('auth.ValidationCodeExpired', HttpStatus.BAD_REQUEST);
       }
     }
 
@@ -72,13 +61,14 @@ export class AuthService {
     const payload = {
       email: user.email,
       name: user.name,
-      sub: user.id,
+      phone: user.phone,
     };
 
     return {
       access_token: await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_SECRET,
       }),
+      ...payload,
     };
   }
 }

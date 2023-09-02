@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UsePipes,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, UsePipes } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { JoiValidationPipe } from '@validations/joi-schema.validation';
 import { PhoneSchema, UserSchema } from '@validations/user';
@@ -77,10 +68,7 @@ export class AccountController {
 
       return;
     } else {
-      throw new HttpException(
-        'user.validation.login.noUsersFound',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('user.validation.login.noUsersFound', HttpStatus.BAD_REQUEST);
     }
   }
 }
