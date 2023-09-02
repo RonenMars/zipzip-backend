@@ -15,8 +15,8 @@ import { AccountService } from '@root/account/account.service';
     PrismaModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: <string>configService.get(EnvVariables.JsonWebToken),
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get(EnvVariables.JsonWebToken),
         signOptions: {
           expiresIn: 3600,
         },
@@ -24,5 +24,6 @@ import { AccountService } from '@root/account/account.service';
       inject: [ConfigService],
     }),
   ],
+  exports: [JwtModule],
 })
 export class AuthModule {}
