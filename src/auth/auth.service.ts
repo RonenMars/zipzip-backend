@@ -33,7 +33,8 @@ export class AuthService {
     if (user.validationCode === null) {
       throw new HttpException('auth.UserMissingValidationCode', HttpStatus.BAD_REQUEST);
     } else {
-      const isValidationCodeExpired = user.codeExpiration && moment(moment()).isBefore(user.codeExpiration);
+      const isValidationCodeExpired =
+        user.codeExpiration && moment(moment()).isBefore(user.codeExpiration);
 
       if (isValidationCodeExpired) {
         const validPassword = await verifyPassword({

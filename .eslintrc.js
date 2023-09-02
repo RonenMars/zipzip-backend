@@ -5,8 +5,12 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'nestjs'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended', 'plugin:nestjs/recommended'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'nestjs', 'prettier'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'plugin:nestjs/recommended',
+  ],
   root: true,
   env: {
     node: true,
@@ -18,11 +22,5 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'nestjs/use-validation-pipe': 'off',
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'crlf',
-      },
-    ],
   },
 };

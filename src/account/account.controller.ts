@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  UsePipes,
+} from '@nestjs/common';
 import { AccountService } from './account.service';
 import { JoiValidationPipe } from '@validations/joi-schema.validation';
 import { PhoneSchema, UserSchema } from '@validations/user';

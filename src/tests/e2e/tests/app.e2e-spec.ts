@@ -63,7 +63,10 @@ describe('AppController (e2e)', () => {
   });
 
   it('/account/login/valid-phoneNumber (GET)', () => {
-    return request(app.getHttpServer()).get('/account/0505822444').expect(200).expect({ userId: 99 });
+    return request(app.getHttpServer())
+      .get('/account/0505822444')
+      .expect(200)
+      .expect({ userId: 99 });
   });
 
   it('/account/invalid-phoneNumber (GET)', () => {

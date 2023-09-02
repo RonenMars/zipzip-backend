@@ -9,7 +9,12 @@ import { TwilioClient } from 'nestjs-twilio/dist/utils';
  * @param {TwilioClient} client - The Twilio client for sending the message.
  * @throws {Error} Throws an error with a status code of 400 if there's an issue sending the SMS.
  */
-export const sendSMS = async (fromNumber: string, phoneNumber: string, message: string, client: TwilioClient) => {
+export const sendSMS = async (
+  fromNumber: string,
+  phoneNumber: string,
+  message: string,
+  client: TwilioClient,
+) => {
   try {
     await client.messages.create({
       from: fromNumber,

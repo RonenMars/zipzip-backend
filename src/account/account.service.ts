@@ -61,7 +61,10 @@ export class AccountService {
    * @param {object} params - Parameters for specifying the user to update and the updated data.
    * @returns {Promise<User>} The updated user object.
    */
-  async updateUser(params: { where: Prisma.UserWhereUniqueInput; data: Prisma.UserUpdateInput }): Promise<User> {
+  async updateUser(params: {
+    where: Prisma.UserWhereUniqueInput;
+    data: Prisma.UserUpdateInput;
+  }): Promise<User> {
     const { where, data } = params;
     return this.prisma.user.update({
       data,
