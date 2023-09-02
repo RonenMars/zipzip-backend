@@ -5,6 +5,7 @@ import { PrismaService } from '@root/prisma.service';
 import { getPhoneNumber, verifyPassword } from '@root/utils';
 import { UserLoginDto } from '@validations/user/dto';
 import { AccountService } from '@root/account/account.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class AuthService {
@@ -27,26 +28,33 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new HttpException(
-        { message: 'auth.UserNotFound' },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('auth.UserNotFound', HttpStatus.BAD_REQUEST);
     }
 
     if (user.validationCode === null) {
       throw new HttpException(
-        { message: 'auth.UserMissingValidationCode' },
+        'auth.UserMissingValidationCode',
         HttpStatus.BAD_REQUEST,
       );
     } else {
-      const validPassword = await verifyPassword({
-        password: loginDto.validationCode,
-        hash: user.validationCode,
-      });
+      const isValidationCodeExpired =
+        user.codeExpiration && moment(user.codeExpiration).isBefore(moment());
 
-      if (!validPassword) {
+      if (isValidationCodeExpired) {
+        const validPassword = await verifyPassword({
+          password: loginDto.validationCode,
+          hash: user.validationCode,
+        });
+
+        if (!validPassword) {
+          throw new HttpException(
+            'auth.UserBadValidationCode',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      } else {
         throw new HttpException(
-          'auth.UserBadValidationCode',
+          'auth.ValidationCodeExpired',
           HttpStatus.BAD_REQUEST,
         );
       }
