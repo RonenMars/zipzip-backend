@@ -5,6 +5,7 @@ import { getPhoneNumber, verifyPassword } from '@root/utils';
 import { UserLoginDto } from '@validations/user/dto';
 import { AccountService } from '@root/account/account.service';
 import * as moment from 'moment';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,7 @@ export class AuthService {
    * Authenticate a user by logging them in.
    *
    * @param {UserLoginDto} loginDto - The user's login data.
-   * @returns {Promise<{ success: boolean, access_token: string }>} A response containing an access token if authentication is successful.
+   * @returns {Promise<{ access_token: string; email: string | null; name: string; phone: string }>} A response containing an access token if authentication is successful.
    * @throws {HttpException} Throws an exception with a status code and message for various authentication failures.
    */
   async login(loginDto: UserLoginDto) {
@@ -34,9 +35,11 @@ export class AuthService {
       throw new HttpException('auth.UserMissingValidationCode', HttpStatus.BAD_REQUEST);
     } else {
       const isValidationCodeExpired =
-        user.codeExpiration && moment(moment()).isBefore(user.codeExpiration);
+        user.codeExpiration && moment(moment()).isAfter(user.codeExpiration);
 
       if (isValidationCodeExpired) {
+        throw new HttpException('auth.ValidationCodeExpired', HttpStatus.BAD_REQUEST);
+      } else {
         const validPassword = await verifyPassword({
           password: loginDto.validationCode,
           hash: user.validationCode,
@@ -45,8 +48,6 @@ export class AuthService {
         if (!validPassword) {
           throw new HttpException('auth.UserBadValidationCode', HttpStatus.BAD_REQUEST);
         }
-      } else {
-        throw new HttpException('auth.ValidationCodeExpired', HttpStatus.BAD_REQUEST);
       }
     }
 
@@ -58,7 +59,17 @@ export class AuthService {
         codeExpiration: null,
       },
     });
+    return this.getUserLoginData(user);
+  }
 
+  /**
+   Returns the user's login data in a JSON Web Token (JWT) format.
+   @param {User} user - The user object.
+   @returns {Promise<{ access_token: string, email: string, name: string, phone: string }>} The user's login data, including an access token.
+   */
+  async getUserLoginData(
+    user: User,
+  ): Promise<{ access_token: string; email: string | null; name: string; phone: string }> {
     const payload = {
       email: user.email,
       name: user.name,

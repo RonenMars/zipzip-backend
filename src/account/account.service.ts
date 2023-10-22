@@ -9,13 +9,18 @@ export class AccountService {
   /**
    * Find a user by phone number.
    *
-   * @param {string} phoneNumber - The phone number to search for.
    * @returns {Promise<User | null>} The user object if found, otherwise null.
+   * @param userData
    */
-  async user(phoneNumber: string): Promise<User | null> {
-    return this.prisma.user.findUnique({
+  async user(userData: isUserExists): Promise<User | null> {
+    return this.prisma.user.findFirst({
       where: {
-        phone: phoneNumber,
+        OR: [
+          {
+            phone: userData.phone,
+          },
+          { email: userData.email },
+        ],
       },
     });
   }
