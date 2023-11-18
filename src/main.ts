@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { HttpExceptionFilter } from '@root/exception.handler';
 const prisma = new PrismaClient();
+import { useContainer } from 'class-validator';
 
 require('module-alias/register');
 
@@ -49,6 +50,8 @@ async function bootstrap() {
     methods: ['GET', 'POST'],
     credentials: true,
   });
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   await app.listen(port);
 }

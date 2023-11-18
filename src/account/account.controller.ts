@@ -9,7 +9,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AccountService } from './account.service';
-import { JoiValidationPipe } from '@validations/joi-schema.validation';
+import { JoiValidationPipe } from '@root/validations';
 import { LoginSchema, PhoneSchema, UserSchema } from '@validations/user';
 import { UserLoginDto } from '@validations/user/dto';
 import { generateOTP, getPhoneNumber, hashPassword } from '@root/utils';
@@ -21,6 +21,8 @@ import { sendSMS } from '@utils/twilio';
 import { OTP_LENGTH } from '@utils/constants';
 import { UserRegisterDto } from '@validations/user/dto/register.dto';
 import { AuthService } from '@root/auth';
+import { UserRequestOTPDto } from '@validations/user/dto/login.request.otp';
+import { OtpResendRequestSchema } from '@validations/user/otpResendRequest';
 
 @Controller('account')
 export class AccountController {
@@ -58,7 +60,7 @@ export class AccountController {
       if (process.env.NODE_ENV === 'production') {
         await sendSMS(
           <string>this.configService.get(EnvVariables.TwilioSenderPhoneNumber),
-          newUser.phone,
+          phoneNumber,
           message,
           this.twilioService.client,
         );
@@ -70,6 +72,46 @@ export class AccountController {
     }
 
     throw new HttpException('user.validation.register.userExist', HttpStatus.BAD_REQUEST);
+  }
+
+  @Post('otp/resend')
+  @UsePipes(new JoiValidationPipe(OtpResendRequestSchema))
+  async resendOtpCode(@Body() userOTPRequest: UserRequestOTPDto) {
+    const phoneNumber = getPhoneNumber(userOTPRequest.phone);
+
+    const user = await this.accountService.user({
+      phone: phoneNumber,
+    });
+
+    const otpForUser = generateOTP(OTP_LENGTH);
+    const message = `Your code is ${otpForUser}`;
+
+    if (user) {
+      await this.accountService.updateUser({
+        where: { phone: user.phone },
+        data: {
+          ...user,
+          validationCode: await hashPassword(otpForUser),
+          codeExpiration: moment().add(3, 'minutes').format(),
+          lastSMSCodeRequest: moment().toDate(),
+        },
+      });
+
+      if (process.env.NODE_ENV === 'production') {
+        await sendSMS(
+          <string>this.configService.get(EnvVariables.TwilioSenderPhoneNumber),
+          phoneNumber,
+          message,
+          this.twilioService.client,
+        );
+      } else {
+        console.log('OTP Code: ', otpForUser);
+      }
+
+      return;
+    }
+
+    throw new HttpException('user.validation.register.userNotExist', HttpStatus.BAD_REQUEST);
   }
 
   /**
@@ -119,6 +161,7 @@ export class AccountController {
           ...user,
           validationCode: await hashPassword(otpForUser),
           codeExpiration: moment().add(3, 'minutes').format(),
+          lastSMSCodeRequest: moment().toDate(),
         },
       });
       if (process.env.NODE_ENV === 'production') {

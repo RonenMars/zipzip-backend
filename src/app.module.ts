@@ -12,6 +12,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { TwilioModule } from 'nestjs-twilio';
 import { config } from '@root/config/config';
 import { EnvVariables } from '@enums/env.variables';
+import { LimitAttemptsRequestsByRetriesConstraint } from '@validations/otp-attempts-number.validation';
+import { LimitAttemptsByTimeConstraint } from '@validations/otp-time-requests.validation';
 
 @Module({
   imports: [
@@ -39,7 +41,14 @@ import { EnvVariables } from '@enums/env.variables';
     }),
   ],
   controllers: [AppController, AuthController, AccountController],
-  providers: [AppService, PrismaService, AuthService, AccountService],
+  providers: [
+    AppService,
+    PrismaService,
+    AuthService,
+    AccountService,
+    LimitAttemptsRequestsByRetriesConstraint,
+    LimitAttemptsByTimeConstraint,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -57,6 +57,7 @@ export class AuthService {
         ...user,
         validationCode: null,
         codeExpiration: null,
+        loginAttempts: 0,
       },
     });
     return this.getUserLoginData(user);

@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserLoginDto } from '@validations/user/dto/login.dto';
 import { LoginSchema } from '@validations/user';
-import { JoiValidationPipe } from '@validations/joi-schema.validation';
+import { JoiValidationPipe } from '@root/validations';
 
 @Controller('auth')
 export class AuthController {
