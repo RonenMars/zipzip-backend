@@ -7,6 +7,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '@root/prisma.service';
 import { getPhoneNumber } from '@root/utils';
 import * as moment from 'moment/moment';
+import { OTP_MAX_ATTEMPTS, OTP_TIME_UNTIL_THE_NEXT_ATTEMPT } from '@utils/constants';
+import { translate } from '@i18n/translate';
 
 @ValidatorConstraint({ name: 'LimitAttemptsRequestsByRetries', async: true })
 @Injectable()
@@ -22,8 +24,8 @@ export class LimitAttemptsRequestsByRetriesConstraint implements ValidatorConstr
       where: { phone: phoneNumber },
     });
 
-    if (record && record.loginAttempts && record.loginAttempts > 5) {
-      const ifPast = moment().subtract(1, 'minutes').toDate();
+    if (record && record.loginAttempts && record.loginAttempts > OTP_MAX_ATTEMPTS) {
+      const ifPast = moment().subtract(OTP_TIME_UNTIL_THE_NEXT_ATTEMPT, 'minutes').toDate();
       if (record && record.lastSMSCodeRequest) {
         if (new Date(record.lastSMSCodeRequest) < ifPast) {
           await this.prisma['user'].update({
@@ -36,10 +38,12 @@ export class LimitAttemptsRequestsByRetriesConstraint implements ValidatorConstr
         }
       }
 
-      throw new HttpException(
-        'user.validation.login.tooManyAttempts',
-        HttpStatus.TOO_MANY_REQUESTS,
+      const errorMessage = translate('user.validation.login.tooManyAttempts').replace(
+        '{minutes}',
+        OTP_TIME_UNTIL_THE_NEXT_ATTEMPT.toString(),
       );
+
+      throw new HttpException(errorMessage, HttpStatus.TOO_MANY_REQUESTS);
     }
 
     await this.prisma['user'].update({

@@ -16,7 +16,7 @@
     },
     "login": {
       "noUsersFound": "מספר טלפון שגוי",
-      "tooManyAttempts": "יותר מדי ניסיונות התחברות, נסו להתחבר בעוד 15 דקות",
+      "tooManyAttempts": "יותר מדי ניסיונות התחברות, נסו להתחבר בעוד {minutes} דקות",
       "tooEarlyAttempt": "חכו רגע, עוד לא עברה חצי דקה"
     },
     "register": {

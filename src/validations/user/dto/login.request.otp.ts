@@ -1,7 +1,6 @@
-import { LimitAttemptsByTime, LimitAttemptsRequestsByRetries } from '@root/validations';
+import { LimitAttemptsByTime } from '@root/validations';
 
 export class UserRequestOTPDto {
-  @LimitAttemptsRequestsByRetries()
   @LimitAttemptsByTime()
   phone: string;
 }
