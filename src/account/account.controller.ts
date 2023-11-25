@@ -18,7 +18,7 @@ import { TwilioService } from 'nestjs-twilio';
 import { ConfigService } from '@nestjs/config';
 import { EnvVariables } from '@enums/env.variables';
 import { sendSMS } from '@utils/twilio';
-import { OTP_LENGTH } from '@utils/constants';
+import { OTP_FLOW_EXPIRATION_MINUTES, OTP_LENGTH } from '@utils/constants';
 import { UserRegisterDto } from '@validations/user/dto/register.dto';
 import { AuthService } from '@root/auth';
 import { UserRequestOTPDto } from '@validations/user/dto/login.request.otp';
@@ -54,7 +54,7 @@ export class AccountController {
         name: newUser.name,
         phone: phoneNumber,
         validationCode: await hashPassword(otpForUser),
-        codeExpiration: moment().add(3, 'minutes').format(),
+        codeExpiration: moment().add(OTP_FLOW_EXPIRATION_MINUTES, 'minutes').format(),
       });
 
       if (process.env.NODE_ENV === 'production') {
@@ -92,7 +92,7 @@ export class AccountController {
         data: {
           ...user,
           validationCode: await hashPassword(otpForUser),
-          codeExpiration: moment().add(3, 'minutes').format(),
+          codeExpiration: moment().add(OTP_FLOW_EXPIRATION_MINUTES, 'minutes').format(),
           lastSMSCodeRequest: moment().toDate(),
         },
       });
@@ -160,7 +160,7 @@ export class AccountController {
         data: {
           ...user,
           validationCode: await hashPassword(otpForUser),
-          codeExpiration: moment().add(3, 'minutes').format(),
+          codeExpiration: moment().add(OTP_FLOW_EXPIRATION_MINUTES, 'minutes').format(),
           lastSMSCodeRequest: moment().toDate(),
         },
       });
